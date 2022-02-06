@@ -1,4 +1,5 @@
 -----------------------------------------------------
+-- Querys to display custom tables on department, employee and role
 -- department( id , dep_name );
 -- role(id, dep_id , role_title ,  role_salary );
 -- employee(id , role_id, first_name, last_name,  manager_id );
