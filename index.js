@@ -1,13 +1,48 @@
 // acrodign to instructoronly need the index,js ad db folder
 // dist, helpers, lib, middleware, public, routes, src and server.js are extra
+const inquirer = require('inquirer');
 
+const result = []
 ///**************************************************** */
 /// main prompt to ask user what they would like to do.
 /// CHOICES: view all departments, view all roles, view all employees,  
 /// add a department, add a role, add an employee, and update an employee role
 /// *** will be called at the end of every funtion
 ///**************************************************** */
-function mainP(){}
+function mainP(){
+    inquirer    
+        .prompt([
+            {
+                type: 'list',
+                name: 'choice',
+                message: "What would you like to do?",
+                choices:["View all departments", "View all roles", "View all employees",  
+                        "Add a department", "Add a role", "Add an employee",
+                        "Update an employee role"]
+            }
+        ])
+        .then((response) =>{
+            switch(response.choice){
+                case "Add a department":
+                    return view_DEPA();
+                case "View all roles":
+                    return view_ROLE();
+                case "View all employees":
+                    return view_EMPL();
+                case "Add a department":
+                    return add_DEPA();
+                case "Add a role":
+                    return add_ROLE();
+                case "Add an employee":
+                    return add_EMPL();
+                default: // ""Update an employee role"
+                    return update_EMPL();
+            }
+            // if(response.choice === ""){}
+        })
+}
+
+mainP();
 
 ///**************************************************** */
 /// CHOICES from main prompt
