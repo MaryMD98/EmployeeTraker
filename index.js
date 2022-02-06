@@ -81,8 +81,8 @@ function add_DEPA (){
         })
 }
 // * add a role, will prompt questions 
-// Question: the name, salary,
-//  and department for the role and add to the database
+// Question: the name, salary, and department for the role
+// add to the database
 function add_ROLE (){
     inquirer
         .prompt([
@@ -99,20 +99,46 @@ function add_ROLE (){
             {
                 type: 'input',
                 name: 'depa',
-                message: "What department is this role related?"
+                message: "What department is this role related to?"
             }
         ])
         .then((response) => {
-            console.log(`${} this`);
+            console.log(`New Role added, ${response.newRole} is part of ${response.depa} and has ${response.newSalary} salary`);
             mainP();
         })
 }
 // * add an employee, will prompt questions
-// Questions: the employee’s first name, last name,
-//  role, and manager,  add to the database 
+// Questions: the employee’s first name, last name, role, and manager,
+// add to the database , the role  must be a list from data base
 function add_EMPL (){
-    console.log("I am on add_EMPL");
-    mainP();
+    inquirer
+        .prompt([
+            {
+                type: 'input',
+                name: 'firstNAME',
+                message: "What is the First Name?"
+            },
+            {
+                type: 'input',
+                name: 'lastNAME',
+                message: "What is the Last Name?"
+            },
+            {
+                type: 'input',
+                name: 'role',
+                message: "what is the role of the new Employee?"
+            },
+            {
+                type: 'input',
+                name: 'Manager',
+                message: "who is the direct Manager of the new Employee?"
+            }
+        ])
+        .then((response) =>{
+            console.log(`New associate: ${response.firstNAME} ${response.lastNAME} 
+            its role is ${response.role}, and its direct manager is ${response.Manager}`);
+            mainP();
+        })
 }
 // * update an employee role, will prompt questions
 // Queston: select an employee to update
