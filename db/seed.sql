@@ -1,23 +1,23 @@
-INSERT INTO department (dep_id, dep_name)
-VALUES  (1, "Human Resources"),
-        (2, "Finance"),
-        (3, "Front Office"),
-        (4, "Sales");
+INSERT INTO department (dep_name)
+VALUES  ("Human Resources"),
+        ("Finance"),
+        ("Front Office"),
+        ("Sales");
 
 INSERT INTO role (dep_id, role_title, role_salary)
-VALUES  (1, "HR Manager", 100000),
-        (1, "HR Assistance", 80000),
-        (2, "Accounting Director", 180000),
-        (2, "Accountant", 120000),
-        (2, "Cashier", 80000),
-        (3, "Front Office Manager", 140000),
-        (3, "Front Desk Assistant", 120000),
-        (3, "Front Desk Agent", 90000),
-        (3, "Valet Parking", 70000),
-        (4, "Sales Manager", 160000),
-        (4, "Sales Manager Assistant", 140000),
-        (4, "Sales Coordinator", 100000),
-        (4, "Purchase Supervisor", 100000);
+VALUES  (1, "HR Manager", 70000.00),
+        (1, "HR Assistance", 60000.00),
+        (2, "Accounting Director", 100000.00),
+        (2, "Accountant", 80000.00),
+        (2, "Cashier", 40000.00),
+        (3, "Front Office Manager", 65000.00),
+        (3, "Front Desk Assistant", 58000.00),
+        (3, "Front Desk Agent", 42000.00),
+        (3, "Valet Parking", 37000.00),
+        (4, "Sales Manager", 90000.00),
+        (4, "Sales Manager Assistant", 68000.00),
+        (4, "Sales Coordinator", 54000.00),
+        (4, "Purchase Supervisor", 36000.00);
 
 INSERT INTO employee (role_id, first_name, last_name, manager_id)
 VALUES  (1, "Cinthya", "Salinas", null),
