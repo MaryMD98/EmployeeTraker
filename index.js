@@ -1,6 +1,8 @@
 // acrodign to instructoronly need the index,js ad db folder
 // dist, helpers, lib, middleware, public, routes, src and server.js are extra
 const inquirer = require('inquirer');
+const mysql = require('mysql2');
+const cTable = require('console.table');
 
 const result = []
 ///**************************************************** */
@@ -23,7 +25,7 @@ function mainP(){
         ])
         .then((response) =>{
             switch(response.choice){
-                case "Add a department":
+                case "View all departments":
                     return view_DEPA();
                 case "View all roles":
                     return view_ROLE();
@@ -38,7 +40,6 @@ function mainP(){
                 default: // ""Update an employee role"
                     return update_EMPL();
             }
-            // if(response.choice === ""){}
         })
 }
 
@@ -49,7 +50,7 @@ mainP();
 ///**************************************************** */
 // * view all departments, will display departemnts table
 function view_DEPA (){
-    console.log("I am on view depar");
+    console.log("I am on view_DEPA");
     mainP();
 }
 // * view all roles,will display roles table 
@@ -65,15 +66,46 @@ function view_EMPL (){
 // * add a department, will prompt questions
 // question: the name of the department and add to the database 
 function add_DEPA (){
-    console.log("I am on add_DEPA");
-    mainP();
+    inquirer
+        .prompt([
+            {
+                type: 'input',
+                name: 'newDEPA',
+                message: "What is the Name of the new Department?"
+            }
+        ])
+        .then((response) => {
+            console.log(`${response.newDEPA} This is the new Department`);
+            // create a new class with the information from prompt and save to database
+            mainP();
+        })
 }
 // * add a role, will prompt questions 
 // Question: the name, salary,
 //  and department for the role and add to the database
 function add_ROLE (){
-    console.log("I am on add_ROLE");
-    mainP();
+    inquirer
+        .prompt([
+            {
+                type: 'input',
+                name: 'newRole',
+                message: "What is the Name of the new Role?"
+            },
+            {
+                type:'input',
+                name: 'newSalary',
+                message: "What is the new Salary for this role?"
+            },
+            {
+                type: 'input',
+                name: 'depa',
+                message: "What department is this role related?"
+            }
+        ])
+        .then((response) => {
+            console.log(`${} this`);
+            mainP();
+        })
 }
 // * add an employee, will prompt questions
 // Questions: the employee’s first name, last name,
