@@ -135,14 +135,14 @@ function add_EMPL (){
             }
         ])
         .then((response) =>{
-            console.log(`New associate: ${response.firstNAME} ${response.lastNAME} 
-            its role is ${response.role}, and its direct manager is ${response.Manager}`);
+            console.log(`New associate: ${response.firstNAME} ${response.lastNAME} its role is ${response.role}, and its direct manager is ${response.Manager}`);
             mainP();
         })
 }
 // * update an employee role, will prompt questions
 // Queston: select an employee to update
 // and their new role and  updated it in the database
+// what is the employee full name to update?
 function update_EMPL(){
     inquirer
         .prompt([
