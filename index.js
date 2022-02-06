@@ -144,6 +144,21 @@ function add_EMPL (){
 // Queston: select an employee to update
 // and their new role and  updated it in the database
 function update_EMPL(){
-    console.log("I am on update_EMPL");
-    mainP();
+    inquirer
+        .prompt([
+            {
+                type: 'input',
+                name: 'employee',
+                message: "What employee would you like to update?"
+            },
+            {
+                type: 'input',
+                name: 'newROLE',
+                message: "What is the new employee Role?"
+            }
+        ])
+        .then((response) =>{
+            console.log(`Updated ${response.employee} role to ${response.newROLE}`);
+            mainP();
+        })
 }
