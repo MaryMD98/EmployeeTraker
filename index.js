@@ -48,23 +48,44 @@ mainP();
 /// CHOICES from main prompt
 ///**************************************************** */
 // * view all departments, will display departemnts table
-function view_DEPA (){}
+function view_DEPA (){
+    console.log("I am on view depar");
+    mainP();
+}
 // * view all roles,will display roles table 
-function view_ROLE (){}
+function view_ROLE (){
+    console.log("I am on view_ROLE");
+    mainP();
+}
 // * view all employees, will display employee table
-function view_EMPL (){}
+function view_EMPL (){
+    console.log("I am on view_EMPL");
+    mainP();
+}
 // * add a department, will prompt questions
 // question: the name of the department and add to the database 
-function add_DEPA (){}
+function add_DEPA (){
+    console.log("I am on add_DEPA");
+    mainP();
+}
 // * add a role, will prompt questions 
 // Question: the name, salary,
 //  and department for the role and add to the database
-function add_ROLE (){}
+function add_ROLE (){
+    console.log("I am on add_ROLE");
+    mainP();
+}
 // * add an employee, will prompt questions
 // Questions: the employee’s first name, last name,
 //  role, and manager,  add to the database 
-function add_EMPL (){}
+function add_EMPL (){
+    console.log("I am on add_EMPL");
+    mainP();
+}
 // * update an employee role, will prompt questions
 // Queston: select an employee to update
 // and their new role and  updated it in the database
-function update_EMPL(){}
+function update_EMPL(){
+    console.log("I am on update_EMPL");
+    mainP();
+}
