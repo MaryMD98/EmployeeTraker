@@ -1,9 +1,18 @@
-
-// const cTable = require('console.table');
-// const { callbackify } = require('util');
+const cTable = require('console.table');
 const db = require('./connection.js');
 
-
+// Function will return a list of departments for the user to chose from
+const list_dep = async () => {
+    const sql = `SELECT * FROM department;`;
+    const sql_QR = await db.promise().query(sql);
+    console.log(sql_QR[0]);
+    let result = sql_QR[0].map(({dep_name, id}) => ({
+        name: `${dep_name}`,
+        value: id
+    }));
+    console.log(result);
+    return result;
+}
 
 // Display information of the departments
 // function view_depa (){
@@ -33,4 +42,4 @@ const company_depar = () => {
 };
 
 
-module.exports = {company_deparo};
+module.exports = {list_dep};

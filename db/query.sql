@@ -34,6 +34,12 @@ LEFT JOIN role ON associate.role_id = role.id
 LEFT JOIN department ON role.dep_id = department.id
 ORDER BY associate.id;
 
+-- Update the employee roles
+UPDATE employee SET role_id = 13  WHERE id = 17;
+
+-- list of departments
+SELECT * FROM company_db.department;
+
 -----------------------------------------------------
 -- FOR REFERECE -- ** Testing different ways to display tables **
 -----------------------------------------------------

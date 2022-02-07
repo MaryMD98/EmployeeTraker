@@ -2,10 +2,9 @@
 // dist, helpers, lib, middleware, public, routes, src and server.js are extra
 const inquirer = require('inquirer');
 const db = require('./db/connection.js');
-// const {company_depa} = require('./db/index.js');
+const {list_dep} = require('./db/index.js');
 const mysql = require('mysql2');
 const cTable = require('console.table');
-const { setDefaultResultOrder } = require('dns');
 
 const result = []
 ///**************************************************** */
@@ -160,14 +159,15 @@ function add_ROLE (){
                 message: "What is the new Salary for this role?"
             },
             {
-                type: 'input',
+                type: 'list',
                 name: 'depa',
-                message: "What department is this role related to?"
+                message: "What department is this role related to?",
+                choices: async function list() {return list_dep()}
             }
         ])
         .then((response) => {
             const sql = `INSERT INTO role (dep_id, role_title, role_salary)
-            VALUES (?,?,?)`;
+            VALUES (?,?,?);`;
             const params = [response.depa, response.newRole, response.newSalary];
             
             db.query(sql, params, (err, result) => {
@@ -209,7 +209,7 @@ function add_EMPL (){
         ])
         .then((response) =>{
             const sql = `INSERT INTO employee (role_id, first_name, last_name, manager_id)
-            VALUES (?,?,?,?)`;
+            VALUES (?,?,?,?);`;
             const params = [response.role, response.firstNAME, response.lastNAME, response.Manager];
             
             db.query(sql, params, (err, result) => {
@@ -240,7 +240,7 @@ function update_EMPL(){
             }
         ])
         .then((response) =>{
-            const sql = `UPDATE employee SET role_id = ? WHERE first_name = ?`;
+            const sql = `UPDATE employee SET role_id = ? WHERE first_name = ?;`;
             const params = [response.newROLE, response.employee]
             db.query(sql, params, (err, result) => {
                 if (err) { console.log(err); }
