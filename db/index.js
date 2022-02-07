@@ -32,17 +32,5 @@ const company_depar = () => {
     })
 };
 
-// // master function to send the information to correct function
-// function company(method,data){ //, callback){
-//     // switch(method){
-//     //     case "view_DEPA":
-//     //         view_depa();//.then(result => {console.table(result);}).catch((err) => console.log(err));
-//     //         return;
-//     //     default:
-//     //         return console.log("no case available for this query");
-//     // }
-//     if(method === "view_DEPA"){view_depa();console.log("\n i am waiting for the result");}
-//     // callback();
-// }
 
 module.exports = {company_deparo};
