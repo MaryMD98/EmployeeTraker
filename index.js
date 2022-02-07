@@ -5,6 +5,7 @@ const db = require('./db/connection.js');
 // const {company_depa} = require('./db/index.js');
 const mysql = require('mysql2');
 const cTable = require('console.table');
+const { setDefaultResultOrder } = require('dns');
 
 const result = []
 ///**************************************************** */
@@ -94,9 +95,29 @@ function view_ROLE (){
 
 // * view all employees, will display employee table
 function view_EMPL (){
-    console.log("I am on view_EMPL");
-    mainP();
+    const sql = `SELECT  associate.id AS ID,
+        associate.first_name AS First_Name,
+        associate.last_name AS Last_Name,
+        role.role_title AS Job_Title,
+        department.dep_name AS Department,
+        role.role_salary AS Salary,
+        CONCAT(manager.first_name, " ", manager.last_name) AS Manager
+    FROM employee associate
+    LEFT JOIN employee manager ON associate.manager_id = manager.id
+    LEFT JOIN role ON associate.role_id = role.id
+    LEFT JOIN department ON role.dep_id = department.id
+    ORDER BY associate.id;`;
+
+    db.query(sql, (err, row) => {
+        if (err) { console.log(err); } 
+        else {
+            console.log(`\n`);
+            console.table(row);
+            mainP();
+        }
+    })
 }
+
 // * add a department, will prompt questions
 // question: the name of the department and add to the database 
 function add_DEPA (){
@@ -109,9 +130,17 @@ function add_DEPA (){
             }
         ])
         .then((response) => {
-            console.log(`${response.newDEPA} This is the new Department`);
-            // create a new class with the information from prompt and save to database
-            mainP();
+            // create a new query with the information from prompt and save to database
+            const sql = `INSERT INTO department (dep_name)
+            VALUES (?)`;
+            
+            db.query(sql, response.newDEPA, (err, result) => {
+                if (err) { console.log(err); } 
+                else {
+                    console.log(`Added ${response.newDEPA} department to the company_db Database`);
+                    mainP();
+                }
+            });
         })
 }
 // * add a role, will prompt questions 
@@ -138,9 +167,20 @@ function add_ROLE (){
         ])
         .then((response) => {
             console.log(`New Role added, ${response.newRole} is part of ${response.depa} and has ${response.newSalary} salary`);
-            mainP();
+            const sql = `INSERT INTO role (dep_id, role_title, role_salary)
+            VALUES (?)`;
+            const params = [response.depa, response.newRole, response.newSalary];
+            
+            db.query(sql, params, (err, result) => {
+                if (err) { console.log(err); } 
+                else {
+                    console.log(`Added ${response.newRole} role to the company_db Database`);
+                    mainP();
+                }
+            });
         })
 }
+
 // * add an employee, will prompt questions
 // Questions: the employee’s first name, last name, role, and manager,
 // add to the database , the role  must be a list from data base
