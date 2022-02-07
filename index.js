@@ -166,9 +166,8 @@ function add_ROLE (){
             }
         ])
         .then((response) => {
-            console.log(`New Role added, ${response.newRole} is part of ${response.depa} and has ${response.newSalary} salary`);
             const sql = `INSERT INTO role (dep_id, role_title, role_salary)
-            VALUES (?)`;
+            VALUES (?,?,?)`;
             const params = [response.depa, response.newRole, response.newSalary];
             
             db.query(sql, params, (err, result) => {
@@ -209,8 +208,17 @@ function add_EMPL (){
             }
         ])
         .then((response) =>{
-            console.log(`New associate: ${response.firstNAME} ${response.lastNAME} its role is ${response.role}, and its direct manager is ${response.Manager}`);
-            mainP();
+            const sql = `INSERT INTO employee (role_id, first_name, last_name, manager_id)
+            VALUES (?,?,?,?)`;
+            const params = [response.role, response.firstNAME, response.lastNAME, response.Manager];
+            
+            db.query(sql, params, (err, result) => {
+                if (err) { console.log(err); } 
+                else {
+                    console.log(`Added ${response.firstNAME} ${response.lastNAME} role to the company_db Database`);
+                    mainP();
+                }
+            });
         })
 }
 // * update an employee role, will prompt questions
