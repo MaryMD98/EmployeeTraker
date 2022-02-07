@@ -74,9 +74,24 @@ function view_DEPA (){
     
 // * view all roles,will display roles table 
 function view_ROLE (){
-    console.log("I am on view_ROLE");
-    mainP();
+    const sql = `SELECT  role.role_title AS Job_Title, 
+        role.id AS Role_ID, 
+        department.dep_name AS Department, 
+        role.role_salary AS Salary
+    FROM role
+    JOIN department 
+    ON role.dep_id = department.id
+    ORDER BY role.role_title;`;
+    db.query(sql, (err, row) => {
+        if (err) { console.log(err); } 
+        else {
+            console.log(`\n`);
+            console.table(row);
+            mainP();
+        }
+    })
 }
+
 // * view all employees, will display employee table
 function view_EMPL (){
     console.log("I am on view_EMPL");
