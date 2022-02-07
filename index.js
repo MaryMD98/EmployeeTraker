@@ -1,6 +1,7 @@
 // acrodign to instructoronly need the index,js ad db folder
 // dist, helpers, lib, middleware, public, routes, src and server.js are extra
 const inquirer = require('inquirer');
+const company = require('./db/index.js');
 const mysql = require('mysql2');
 const cTable = require('console.table');
 
@@ -51,6 +52,7 @@ mainP();
 // * view all departments, will display departemnts table
 function view_DEPA (){
     console.log("I am on view_DEPA");
+    company('view_DEPA', ' nul ');
     mainP();
 }
 // * view all roles,will display roles table 

@@ -1,4 +1,5 @@
 const express = require('express');
+// const cTable = require('console.table');
 const db = require('./connection.js');
 
 // const app = express();
@@ -23,7 +24,10 @@ function view_depa (){
     FROM department
     ORDER BY department.dep_name;`;
 
-    db.query();
+    db.query(sql, (err,rows) =>{
+        if(err) {console.error(err.message);}
+        else {console.table(rows);}
+    });
 }
 
 // master function to send the information to correct function
