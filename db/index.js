@@ -15,6 +15,25 @@ const db = require('./connection.js');
 // });
 
 // Display information of the departments
-function view_depa (data){
+function view_depa (){
+    console.log("we are on db file index.js");
+    console.log("view departments");
 
+    const sql = `SELECT department.dep_name AS department_Name, department.id AS department_ID
+    FROM department
+    ORDER BY department.dep_name;`;
+
+    db.query();
 }
+
+// master function to send the information to correct function
+function company(method,data){
+    switch(method){
+        case "view_DEPA":
+            return view_depa();
+        default:
+            return console.log("no case available for this query");
+    }
+}
+
+module.exports = company;
