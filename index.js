@@ -1,7 +1,9 @@
 // acrodign to instructoronly need the index,js ad db folder
 // dist, helpers, lib, middleware, public, routes, src and server.js are extra
 const inquirer = require('inquirer');
-const company = require('./db/index.js');
+// const company = require('./db/index.js');
+const db = require('./db/connection.js');
+// const {company_depa} = require('./db/index.js');
 const mysql = require('mysql2');
 const cTable = require('console.table');
 
@@ -25,22 +27,27 @@ function mainP(){
             }
         ])
         .then((response) =>{
-            switch(response.choice){
-                case "View all departments":
-                    return view_DEPA();
-                case "View all roles":
-                    return view_ROLE();
-                case "View all employees":
-                    return view_EMPL();
-                case "Add a department":
-                    return add_DEPA();
-                case "Add a role":
-                    return add_ROLE();
-                case "Add an employee":
-                    return add_EMPL();
-                default: // ""Update an employee role"
-                    return update_EMPL();
-            }
+            // switch(response.choice){
+            //     case "View all departments":
+            //         return view_DEPA();
+            //     case "View all roles":
+            //         return view_ROLE();
+            //     case "View all employees":
+            //         return view_EMPL();
+            //     case "Add a department":
+            //         return add_DEPA();
+            //     case "Add a role":
+            //         return add_ROLE();
+            //     case "Add an employee":
+            //         return add_EMPL();
+            //     default: // ""Update an employee role"
+            //         return update_EMPL();
+            // }
+            if(response.choice === "View all departments"){
+                view_DEPA ();
+                // company_depa(); //.then(mainP())
+                // mainP();
+                }
         })
 }
 
@@ -51,11 +58,30 @@ mainP();
 ///**************************************************** */
 // * view all departments, will display departemnts table
 function view_DEPA (){
-    console.log("I am on view_DEPA");
-    company('view_DEPA', '');
-    mainP();
-    // company('view_DEPA', '').then(() => mainP()).catch((err) => console.log(err));
+    const sql = `SELECT department.dep_name AS Department_Name, department.id AS Department_ID
+    FROM department
+    ORDER BY department.dep_name;`;
+    db.query(sql, (err, row) => {
+        if (err) {
+            console.log(err);
+        } else {
+            console.log(`\n`);
+            console.table(row);
+            mainP();
+        }
+    })
+    
 }
+    
+//     {
+// // const view_DEPA = new Promise (req,res) => {
+//     // console.log("I am on view_DEPA");
+//     // company('view_DEPA', '', function(){}
+//         mainP() =>{company('view_DEPA', '');};
+//     );
+    
+    // await company('view_DEPA', '').then(() => mainP()).catch((err) => console.log(err));
+// }
 // * view all roles,will display roles table 
 function view_ROLE (){
     console.log("I am on view_ROLE");
