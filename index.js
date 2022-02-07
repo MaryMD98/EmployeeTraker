@@ -200,7 +200,7 @@ function add_EMPL (){
                 type: 'list',
                 name: 'role',
                 message: "what is the role of the new Employee?",
-                choices: async function listROLE() { return list_role();}
+                choices: async function list() { return list_role();}
             },
             {
                 type: 'list',
