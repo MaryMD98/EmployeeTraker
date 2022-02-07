@@ -1,4 +1,6 @@
 const express = require('express');
+const { __await } = require('tslib');
+const { query } = require('./connection.js');
 // const cTable = require('console.table');
 const db = require('./connection.js');
 
@@ -16,25 +18,43 @@ const db = require('./connection.js');
 // });
 
 // Display information of the departments
-function view_depa (){
-    console.log("we are on db file index.js");
-    console.log("view departments");
-
-    const sql = `SELECT department.dep_name AS department_Name, department.id AS department_ID
+// function view_depa (){
+async function view_depa (){
+ 
+    const sql = `SELECT department.dep_name AS Department_Name, department.id AS Department_ID
     FROM department
     ORDER BY department.dep_name;`;
+    // try {
+    //     const promiseDB = db.promise();
+    // const result = await promiseDB.query(sql); 
 
-    db.query(sql, (err,rows) =>{
-        if(err) {console.error(err.message);}
-        else {console.table(rows);}
-    });
+    const result = await db.promise().query(sql);
+    console.log(`\n`);
+    console.table(result[0]);
+    //  return ;
+        // ,(err,rows) =>{
+        //     // callback funtion
+            // if(err) {console.error(err.message);}
+            // return rows;
+            // });
+            // console.table(result);
+        
+        
+    // console.table(rows);
+    // } catch (error){console.log(error);}
+    // await db.query(sql, (err,rows) =>{
+    //     // callback funtion
+    //     if(err) {console.error(err.message);}
+    //     else {console.table(rows);}
+    // });
 }
 
 // master function to send the information to correct function
 function company(method,data){
     switch(method){
         case "view_DEPA":
-            return view_depa();
+            view_depa();//.then(result => {console.table(result);}).catch((err) => console.log(err));
+            return;
         default:
             return console.log("no case available for this query");
     }

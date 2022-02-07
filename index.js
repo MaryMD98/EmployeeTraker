@@ -52,8 +52,9 @@ mainP();
 // * view all departments, will display departemnts table
 function view_DEPA (){
     console.log("I am on view_DEPA");
-    company('view_DEPA', ' nul ');
+    company('view_DEPA', '');
     mainP();
+    // company('view_DEPA', '').then(() => mainP()).catch((err) => console.log(err));
 }
 // * view all roles,will display roles table 
 function view_ROLE (){
