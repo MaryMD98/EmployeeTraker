@@ -2,7 +2,7 @@
 // dist, helpers, lib, middleware, public, routes, src and server.js are extra
 const inquirer = require('inquirer');
 const db = require('./db/connection.js');
-const {list_dep} = require('./db/index.js');
+const {list_dep, list_role, list_manager} = require('./db/index.js');
 const mysql = require('mysql2');
 const cTable = require('console.table');
 
@@ -197,14 +197,16 @@ function add_EMPL (){
                 message: "What is the Last Name?"
             },
             {
-                type: 'input',
+                type: 'list',
                 name: 'role',
-                message: "what is the role of the new Employee?"
+                message: "what is the role of the new Employee?",
+                choices: async function listROLE() { return list_role();}
             },
             {
-                type: 'input',
+                type: 'list',
                 name: 'Manager',
-                message: "who is the direct Manager of the new Employee?"
+                message: "who is the direct Manager of the new Employee?",
+                choices: async function list() { return list_manager();}
             }
         ])
         .then((response) =>{

@@ -14,6 +14,16 @@ const list_dep = async () => {
     return result;
 }
 
+// Function will return a list of the roles available
+const list_role = async () => {
+
+}
+
+// function will return a list of managers
+const list_manager = async () => {
+    
+} 
+
 // Display information of the departments
 // function view_depa (){
 const company_deparo = async () => {
@@ -42,4 +52,4 @@ const company_depar = () => {
 };
 
 
-module.exports = {list_dep};
+module.exports = {list_dep, list_role, list_manager};
