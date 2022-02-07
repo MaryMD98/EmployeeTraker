@@ -2,11 +2,10 @@
 // dist, helpers, lib, middleware, public, routes, src and server.js are extra
 const inquirer = require('inquirer');
 const db = require('./db/connection.js');
-const {list_dep, list_role, list_manager} = require('./db/index.js');
+const {list_dep, list_role, list_manager, list_employee} = require('./db/index.js');
 const mysql = require('mysql2');
 const cTable = require('console.table');
 
-const result = []
 ///**************************************************** */
 /// main prompt to ask user what they would like to do.
 /// CHOICES: view all departments, view all roles, view all employees,  
@@ -162,7 +161,7 @@ function add_ROLE (){
                 type: 'list',
                 name: 'depa',
                 message: "What department is this role related to?",
-                choices: async function list() {return list_dep()}
+                choices: async function list() {return list_dep();}
             }
         ])
         .then((response) => {
@@ -231,23 +230,27 @@ function update_EMPL(){
     inquirer
         .prompt([
             {
-                type: 'input',
+                type: 'list',
                 name: 'employee',
-                message: "What employee would you like to update?"
+                message: "What employee would you like to update?",
+                choices: async function list() { return list_employee();}
             },
             {
-                type: 'input',
+                type: 'list',
                 name: 'newROLE',
-                message: "What is the new employee Role?"
+                message: "What is the new employee Role?",
+                choices: async function list() { return list_role();}
             }
         ])
         .then((response) =>{
-            const sql = `UPDATE employee SET role_id = ? WHERE first_name = ?;`;
+            const sql = `UPDATE employee SET role_id = ? WHERE id = ?;`;
+            // check if the new role is in the same department of that role
+            console.log(response.employee);
             const params = [response.newROLE, response.employee]
             db.query(sql, params, (err, result) => {
                 if (err) { console.log(err); }
                 else {
-                    console.log(`Updated ${response.employee} role to ${response.newROLE}`);
+                    console.log(`Updated associate new role information`);
                     mainP();
                 }
             });

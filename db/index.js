@@ -42,5 +42,18 @@ const list_manager = async () => {
     return result;
 } 
 
+// function will list all employees
+const list_employee = async () => {
+    const sql = `SELECT	employee.id,
+        CONCAT(employee.first_name, " ", employee.last_name) AS employees
+    FROM employee;`;
+    const sql_QR = await db.promise().query(sql);
 
-module.exports = {list_dep, list_role, list_manager};
+    let result = sql_QR[0].map(({id, employees}) => ({
+        name: `${employees}`,
+        value: id
+    }));
+    return result;
+}
+
+module.exports = {list_dep, list_role, list_manager, list_employee};

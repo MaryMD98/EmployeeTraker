@@ -50,6 +50,11 @@ SELECT	employee.id,
 FROM employee
 WHERE employee.manager_id IS NULL;
 
+-- List of associates
+SELECT	employee.id,
+		CONCAT(employee.first_name, " ", employee.last_name) AS Employees
+FROM employee;
+
 -- to delete a row
 DELETE 
 FROM role 
