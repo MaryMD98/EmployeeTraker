@@ -215,7 +215,7 @@ function add_EMPL (){
             db.query(sql, params, (err, result) => {
                 if (err) { console.log(err); } 
                 else {
-                    console.log(`Added ${response.firstNAME} ${response.lastNAME} role to the company_db Database`);
+                    console.log(`Added ${response.firstNAME} ${response.lastNAME} to the company_db Database`);
                     mainP();
                 }
             });
@@ -240,7 +240,14 @@ function update_EMPL(){
             }
         ])
         .then((response) =>{
-            console.log(`Updated ${response.employee} role to ${response.newROLE}`);
-            mainP();
+            const sql = `UPDATE employee SET role_id = ? WHERE first_name = ?`;
+            const params = [response.newROLE, response.employee]
+            db.query(sql, params, (err, result) => {
+                if (err) { console.log(err); }
+                else {
+                    console.log(`Updated ${response.employee} role to ${response.newROLE}`);
+                    mainP();
+                }
+            });
         })
 }
