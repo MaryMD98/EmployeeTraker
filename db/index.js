@@ -16,12 +16,13 @@ const list_dep = async () => {
 
 // Function will return a list of the roles available
 const list_role = async () => {
+    const sql = ``;
 
 }
 
 // function will return a list of managers
 const list_manager = async () => {
-    
+
 } 
 
 // Display information of the departments

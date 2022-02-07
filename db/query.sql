@@ -37,8 +37,23 @@ ORDER BY associate.id;
 -- Update the employee roles
 UPDATE employee SET role_id = 13  WHERE id = 17;
 
--- list of departments
-SELECT * FROM company_db.department;
+-- list of all departments
+SELECT * FROM department;
+
+-- list of all roles
+SELECT role.id, role.role_title
+FROM role;
+
+-- list of managers 
+SELECT	employee.id,
+		CONCAT(employee.first_name, " ", employee.last_name) AS manager
+FROM employee
+WHERE employee.manager_id IS NULL;
+
+-- to delete a row
+DELETE 
+FROM role 
+WHERE role.id = 15;
 
 -----------------------------------------------------
 -- FOR REFERECE -- ** Testing different ways to display tables **
