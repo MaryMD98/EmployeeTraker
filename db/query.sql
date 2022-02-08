@@ -93,7 +93,12 @@ DELETE FROM department WHERE department.id = ?;
 DELETE FROM employee WHERE employee.id = ?;
 
 -- view the total utilized budget of a department 
-
+SELECT  department.dep_name AS Department,
+        SUM(role.role_salary) Department_Budget 
+FROM employee 
+LEFT JOIN role ON employee.role_id = role.id
+LEFT JOIN department ON role.dep_id = department.id
+WHERE department.id = ?;
 
 
 -----------------------------------------------------

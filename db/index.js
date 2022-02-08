@@ -56,4 +56,12 @@ const list_employee = async () => {
     return result;
 }
 
+//used to init
+// npm init
+// npm i inquirer
+// npm i myql2
+// npm i console.table
+// npm i dotenv
+// npm i express
+
 module.exports = {list_dep, list_role, list_manager, list_employee};

@@ -15,45 +15,24 @@ function mainP(){
                 type: 'list',
                 name: 'choice',
                 message: "What would you like to do?",
-                choices:["View all departments", "View all roles", "View all employees", "Add a department", "Add a role", "Add an employee",
-                        "Update an employee role", "Update employe manager", "View employees by manager", "View employees by department", "Delete departments, roles, and employees" ]
+                choices:["View all departments", "View all roles", "View all employees", "Add a department", "Add a role", "Add an employee", "Update an employee role", 
+                        "Update employe manager", "View employees by manager", "View employees by department", "Delete departments, roles, and employees", "View total utilized budget of a department" ]
             }
         ])
         .then((response) =>{
             switch(response.choice){
-                case "View all departments":
-                    view_DEPA();
-                    break;
-                case "View all roles":
-                    view_ROLE();
-                    break;
-                case "View all employees":
-                    view_EMPL();
-                    break;
-                case "Add a department":
-                    add_DEPA();
-                    break;
-                case "Add a role":
-                    add_ROLE();
-                    break
-                case "Add an employee":
-                    add_EMPL();
-                    break;
-                case "Update an employee role":
-                    update_EMPL();
-                    break;
-                case "Update employe manager":
-                    update_MANA();
-                    break;
-                case "View employees by manager":
-                    viewBY_MANA();
-                    break;
-                case "View employees by department":
-                    viewBY_DEPA();
-                    break;
-                default: // "Delete departments, roles, and employees"  
-                    delete_COMP();
-                    break;
+                case "View all departments": view_DEPA(); break;
+                case "View all roles": view_ROLE(); break;
+                case "View all employees": view_EMPL(); break;
+                case "Add a department": add_DEPA(); break;
+                case "Add a role": add_ROLE(); break;
+                case "Add an employee": add_EMPL(); break;
+                case "Update an employee role": update_EMPL(); break;
+                case "Update employe manager": update_MANA(); break;
+                case "View employees by manager": viewBY_MANA(); break;
+                case "View employees by department": viewBY_DEPA(); break;
+                case "Delete departments, roles, and employees": delete_COMP(); break;
+                default: budget(); break;
             }
         })
 }
@@ -65,30 +44,22 @@ mainP();
 ///**************************************************** */
 // * view all departments, will display departemnts table
 function view_DEPA (){
-    const sql = `SELECT department.dep_name AS Department_Name, department.id AS Department_ID
-    FROM department ORDER BY department.dep_name;`;
+    const sql = `SELECT department.id AS Department_ID, department.dep_name AS Department_Name 
+    FROM department ORDER BY department.id;`;
     db.query(sql, (err, row) => {
         if (err) { console.log(err); } 
-        else {
-            console.log(`\n`);
-            console.table(row);
-            mainP();
-        }})
-}
-    
+        else { console.log(`\n`); console.table(row); mainP(); }
+    })
+} 
 // * view all roles,will display roles table 
 function view_ROLE (){
     const sql = `SELECT  role.role_title AS Job_Title, role.id AS Role_ID, department.dep_name AS Department, role.role_salary AS Salary
     FROM role JOIN department ON role.dep_id = department.id ORDER BY role.role_title;`;
     db.query(sql, (err, row) => {
         if (err) { console.log(err); } 
-        else {
-            console.log(`\n`);
-            console.table(row);
-            mainP();
-        }})
+        else { console.log(`\n`); console.table(row); mainP(); }
+    })
 }
-
 // * view all employees, will display employee table
 function view_EMPL (){
     const sql = `SELECT  associate.id AS ID, associate.first_name AS First_Name, associate.last_name AS Last_Name, role.role_title AS Job_Title, 
@@ -100,13 +71,9 @@ function view_EMPL (){
     ORDER BY associate.id;`;
     db.query(sql, (err, row) => {
         if (err) { console.log(err); } 
-        else {
-            console.log(`\n`);
-            console.table(row);
-            mainP();
-        }})
+        else { console.log(`\n`); console.table(row); mainP(); }
+    })
 }
-
 // * add a department, will prompt questions
 // question: the name of the department and add to the database 
 function add_DEPA (){
@@ -119,7 +86,6 @@ function add_DEPA (){
             }
         ])
         .then((response) => {
-            // create a new query with the information from prompt and save to database
             const sql = `INSERT INTO department (dep_name) VALUES (?)`;    
             db.query(sql, response.newDEPA, (err, result) => {
                 if (err) { console.log(err); } 
@@ -152,13 +118,11 @@ function add_ROLE (){
         .then((response) => {
             const sql = `INSERT INTO role (dep_id, role_title, role_salary) VALUES (?,?,?);`;
             const params = [response.depa, response.newRole, response.newSalary];
-            
             db.query(sql, params, (err, result) => {
                 if (err) { console.log(err); } 
                 else { mainP(); }
             }); })
 }
-
 // * add an employee, will prompt questions
 // Questions: the employee’s first name, last name, role, and manager,
 // add to the database , the role  must be a list from data base
@@ -218,14 +182,12 @@ function update_EMPL(){
         ])
         .then((response) =>{
             const sql = `UPDATE employee SET role_id = ? WHERE id = ?;`;
-            // check if the new role is in the same department of that role
             const params = [response.newROLE, response.employee]
             db.query(sql, params, (err, result) => {
                 if (err) { console.log(err); }
                 else { mainP(); }
             }); })
 }
-
 // -- update employe manager
 function update_MANA(){
     inquirer
@@ -251,7 +213,6 @@ function update_MANA(){
                 else { mainP(); }
             }); })
 }
-
 // -- view employees by manager
 // chose a manager to display the employees related to this manager
 function viewBY_MANA(){
@@ -273,12 +234,11 @@ function viewBY_MANA(){
             LEFT JOIN role ON associate.role_id = role.id
             LEFT JOIN department ON role.dep_id = department.id
             WHERE associate.manager_id = ?;`;
-            db.query(sql, response.manager, (err, result) => {
+            db.query(sql, response.manager, (err, row) => {
                 if (err){ console.log(err); }
-                else { mainP(); }
+                else { console.log(`\n`); console.table(row); mainP(); }
             }); })
 }
-
 // -- view employees by department
 // chose a department and display employees on department
 function viewBY_DEPA(){
@@ -300,12 +260,11 @@ function viewBY_DEPA(){
         LEFT JOIN role ON associate.role_id = role.id
         LEFT JOIN department ON role.dep_id = department.id
         WHERE department.id = ?;`;
-            db.query(sql, response.depa, (err, result) => {
+            db.query(sql, response.depa, (err, row) => {
                 if(err){ console.log(err); }
-                else { mainP(); }
+                else { console.log(`\n`); console.table(row); mainP(); }
             }); })
 }
-
 // -- delete departments, roles, employees
 function delete_COMP(){
     inquirer
@@ -378,3 +337,23 @@ function delete_EMP(){
             }); })
 }
 // -- view the total utilized budget of a department 
+function budget(){
+    inquirer
+        .prompt([
+            {
+                type: "list",
+                name: "budget",
+                message: "what Department would you like to see the budged?",
+                choices: async function list() {return list_dep();}
+            }
+        ])
+        .then((response) => {
+            const sql = `SELECT  department.dep_name AS Department, SUM(role.role_salary) Department_Budget 
+                FROM employee   LEFT JOIN role ON employee.role_id = role.id
+                LEFT JOIN department ON role.dep_id = department.id
+                WHERE department.id = ?;`;
+            db.query(sql, response.budget, (err, row) => {
+                if(err){ console.log(err); }
+                else { console.log(`\n`); console.table(row); mainP(); }
+            }); })
+}
