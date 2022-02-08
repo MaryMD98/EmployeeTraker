@@ -57,15 +57,44 @@ FROM employee;
 
 -- update employe manager
 UPDATE employee SET manager_id = 13  WHERE id = 17;
--- view employees by manager
--- view employees by department
+
+-- view employees by manager ********
+SELECT  CONCAT(manager.first_name, " ", manager.last_name) AS Manager,
+        CONCAT(associate.first_name, " ", associate.last_name) AS Employee_Name,
+        role.role_title AS Job_Title,
+        department.dep_name AS Department,
+        role.role_salary AS Salary,
+        associate.id AS ID
+FROM employee associate
+LEFT JOIN employee manager ON associate.manager_id = manager.id
+LEFT JOIN role ON associate.role_id = role.id
+LEFT JOIN department ON role.dep_id = department.id
+ORDER BY Manager;
+
+-- view employees by department *********
+SELECT  department.dep_name AS Department,
+        CONCAT(manager.first_name, " ", manager.last_name) AS Manager,
+        CONCAT(associate.first_name, " ", associate.last_name) AS Employee_Name,
+        role.role_title AS Job_Title,
+        role.role_salary AS Salary,
+        associate.id AS ID
+FROM employee associate
+LEFT JOIN employee manager ON associate.manager_id = manager.id
+LEFT JOIN role ON associate.role_id = role.id
+LEFT JOIN department ON role.dep_id = department.id
+ORDER BY Department;
+
 -- delete departments, roles, employees
+-- to delete a role
+DELETE FROM role WHERE role.id = 15;
+-- to delete a department
+DELETE FROM department WHERE department.id = 15;
+-- to delete a employee
+DELETE FROM employee WHERE employee.id = 15;
+
 -- view the total utilized budget of a department 
 
--- to delete a row
-DELETE 
-FROM role 
-WHERE role.id = 15;
+
 
 -----------------------------------------------------
 -- FOR REFERECE -- ** Testing different ways to display tables **

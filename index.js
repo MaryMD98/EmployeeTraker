@@ -21,7 +21,8 @@ function mainP(){
                 message: "What would you like to do?",
                 choices:["View all departments", "View all roles", "View all employees",  
                         "Add a department", "Add a role", "Add an employee",
-                        "Update an employee role", "Update employe manager"]
+                        "Update an employee role", "Update employe manager", "View employees by manager",
+                        "View employees by department"]
             }
         ])
         .then((response) =>{
@@ -47,8 +48,14 @@ function mainP(){
                 case "Update an employee role":
                     update_EMPL();
                     break;
-                default: // "Update employe manager" 
+                case "Update employe manager":
                     update_MANA();
+                    break;
+                case "View employees by manager":
+                    viewBY_MANA();
+                    break;
+                default: // "View employees by department"  
+                    viewBY_DEPA();
                     break;
             }
         })
@@ -290,6 +297,76 @@ function update_MANA(){
 }
 
 // -- view employees by manager
+// chose a manager to display the employees related to this manager
+function viewBY_MANA(){
+    inquirer
+        .prompt([
+            {
+                type: "list",
+                name: "manager",
+                message: "Choose a manager to display the employees related to this manager",
+                choices: async function list() { return list_manager();}
+            }
+        ])
+        .then((response) => {
+            const sql = `SELECT  CONCAT(manager.first_name, " ", manager.last_name) AS Manager,
+                CONCAT(associate.first_name, " ", associate.last_name) AS Employee_Name,
+                role.role_title AS Job_Title,
+                department.dep_name AS Department,
+                role.role_salary AS Salary,
+                associate.id AS ID
+            FROM employee associate
+            LEFT JOIN employee manager ON associate.manager_id = manager.id
+            LEFT JOIN role ON associate.role_id = role.id
+            LEFT JOIN department ON role.dep_id = department.id
+            WHERE associate.manager_id = ?;`;
+            db.query(sql, response.manager, (err, result) => {
+                if (err){ console.log(err); }
+                else {
+                    console.log();
+                    mainP();
+                }
+            });
+        })
+}
+
 // -- view employees by department
+// chose a department and display employees on department
+function viewBY_DEPA(){
+    const sql = `SELECT  department.dep_name AS Department,
+        CONCAT(manager.first_name, " ", manager.last_name) AS Manager,
+        CONCAT(associate.first_name, " ", associate.last_name) AS Employee_Name,
+        role.role_title AS Job_Title,
+        role.role_salary AS Salary,
+        associate.id AS ID
+    FROM employee associate
+    LEFT JOIN employee manager ON associate.manager_id = manager.id
+    LEFT JOIN role ON associate.role_id = role.id
+    LEFT JOIN department ON role.dep_id = department.id
+    ORDER BY Department;`;
+
+    db.query(sql, (err, row) => {
+        if (err) { console.log(err); } 
+        else {
+            console.log(`\n`);
+            console.table(row);
+            mainP();
+        }
+    })
+}
+
 // -- delete departments, roles, employees
+function delete_COMP(){
+    inquirer
+        .prompt([
+            {
+                type: "list",
+                name: "delete",
+                message: "What would you like to delete",
+                choices: ["Department", "Role", "Employee"]
+            }
+        ])
+        .then()
+
+}
 // -- view the total utilized budget of a department 
