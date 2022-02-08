@@ -55,6 +55,13 @@ SELECT	employee.id,
 		CONCAT(employee.first_name, " ", employee.last_name) AS Employees
 FROM employee;
 
+-- update employe manager
+UPDATE employee SET manager_id = 13  WHERE id = 17;
+-- view employees by manager
+-- view employees by department
+-- delete departments, roles, employees
+-- view the total utilized budget of a department 
+
 -- to delete a row
 DELETE 
 FROM role 

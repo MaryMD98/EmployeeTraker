@@ -21,7 +21,7 @@ function mainP(){
                 message: "What would you like to do?",
                 choices:["View all departments", "View all roles", "View all employees",  
                         "Add a department", "Add a role", "Add an employee",
-                        "Update an employee role"]
+                        "Update an employee role", "Update employe manager"]
             }
         ])
         .then((response) =>{
@@ -44,8 +44,11 @@ function mainP(){
                 case "Add an employee":
                     add_EMPL();
                     break;
-                default: // ""Update an employee role"
+                case "Update an employee role":
                     update_EMPL();
+                    break;
+                default: // "Update employe manager" 
+                    update_MANA();
                     break;
             }
         })
@@ -245,7 +248,6 @@ function update_EMPL(){
         .then((response) =>{
             const sql = `UPDATE employee SET role_id = ? WHERE id = ?;`;
             // check if the new role is in the same department of that role
-            console.log(response.employee);
             const params = [response.newROLE, response.employee]
             db.query(sql, params, (err, result) => {
                 if (err) { console.log(err); }
@@ -256,3 +258,38 @@ function update_EMPL(){
             });
         })
 }
+
+// -- update employe manager
+function update_MANA(){
+    inquirer
+        .prompt([
+            {
+                type: "list",
+                name: "employee",
+                message: "What employee would you like to update?",
+                choices: async function list() { return list_employee();}
+            },
+            {
+                type: "list",
+                name: "newMANA",
+                message: "What is the new employee Manager?",
+                choices: async function list() { return list_manager();}
+            }
+        ])
+        .then((response) => {
+            const sql = `UPDATE employee SET manager_id = ? WHERE id = ?;`;
+            const params = [response.newMANA, response.employee]
+            db.query(sql, params, (err, result) => {
+                if (err){ console.log(err); }
+                else {
+                    console.log(`Updated associate's Manager`);
+                    mainP();
+                }
+            });
+        })
+}
+
+// -- view employees by manager
+// -- view employees by department
+// -- delete departments, roles, employees
+// -- view the total utilized budget of a department 
