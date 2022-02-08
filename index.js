@@ -64,10 +64,8 @@ function view_ROLE (){
 function view_EMPL (){
     const sql = `SELECT  associate.id AS ID, associate.first_name AS First_Name, associate.last_name AS Last_Name, role.role_title AS Job_Title, 
         department.dep_name AS Department, role.role_salary AS Salary, CONCAT(manager.first_name, " ", manager.last_name) AS Manager
-    FROM employee associate
-    LEFT JOIN employee manager ON associate.manager_id = manager.id
-    LEFT JOIN role ON associate.role_id = role.id
-    LEFT JOIN department ON role.dep_id = department.id
+    FROM employee associate  LEFT JOIN employee manager ON associate.manager_id = manager.id
+    LEFT JOIN role ON associate.role_id = role.id  LEFT JOIN department ON role.dep_id = department.id
     ORDER BY associate.id;`;
     db.query(sql, (err, row) => {
         if (err) { console.log(err); } 
@@ -229,10 +227,8 @@ function viewBY_MANA(){
             const sql = `SELECT  CONCAT(manager.first_name, " ", manager.last_name) AS Manager,
                 CONCAT(associate.first_name, " ", associate.last_name) AS Employee_Name,
                 role.role_title AS Job_Title, department.dep_name AS Department, role.role_salary AS Salary, associate.id AS ID
-            FROM employee associate
-            LEFT JOIN employee manager ON associate.manager_id = manager.id
-            LEFT JOIN role ON associate.role_id = role.id
-            LEFT JOIN department ON role.dep_id = department.id
+            FROM employee associate  LEFT JOIN employee manager ON associate.manager_id = manager.id
+            LEFT JOIN role ON associate.role_id = role.id  LEFT JOIN department ON role.dep_id = department.id
             WHERE associate.manager_id = ?;`;
             db.query(sql, response.manager, (err, row) => {
                 if (err){ console.log(err); }
