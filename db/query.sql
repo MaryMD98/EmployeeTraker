@@ -69,7 +69,7 @@ FROM employee associate
 LEFT JOIN employee manager ON associate.manager_id = manager.id
 LEFT JOIN role ON associate.role_id = role.id
 LEFT JOIN department ON role.dep_id = department.id
-ORDER BY Manager;
+WHERE associate.manager_id = ?;
 
 -- view employees by department *********
 SELECT  department.dep_name AS Department,
@@ -82,7 +82,7 @@ FROM employee associate
 LEFT JOIN employee manager ON associate.manager_id = manager.id
 LEFT JOIN role ON associate.role_id = role.id
 LEFT JOIN department ON role.dep_id = department.id
-ORDER BY Department;
+WHERE department.id = ?; 
 
 -- delete departments, roles, employees
 -- to delete a role

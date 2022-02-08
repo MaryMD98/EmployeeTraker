@@ -1,10 +1,6 @@
-// acrodign to instructoronly need the index,js ad db folder
-// dist, helpers, lib, middleware, public, routes, src and server.js are extra
 const inquirer = require('inquirer');
 const db = require('./db/connection.js');
 const {list_dep, list_role, list_manager, list_employee} = require('./db/index.js');
-const mysql = require('mysql2');
-const cTable = require('console.table');
 
 ///**************************************************** */
 /// main prompt to ask user what they would like to do.
@@ -19,10 +15,8 @@ function mainP(){
                 type: 'list',
                 name: 'choice',
                 message: "What would you like to do?",
-                choices:["View all departments", "View all roles", "View all employees",  
-                        "Add a department", "Add a role", "Add an employee",
-                        "Update an employee role", "Update employe manager", "View employees by manager",
-                        "View employees by department"]
+                choices:["View all departments", "View all roles", "View all employees", "Add a department", "Add a role", "Add an employee",
+                        "Update an employee role", "Update employe manager", "View employees by manager", "View employees by department"]
             }
         ])
         .then((response) =>{
@@ -69,61 +63,45 @@ mainP();
 // * view all departments, will display departemnts table
 function view_DEPA (){
     const sql = `SELECT department.dep_name AS Department_Name, department.id AS Department_ID
-    FROM department
-    ORDER BY department.dep_name;`;
+    FROM department ORDER BY department.dep_name;`;
     db.query(sql, (err, row) => {
         if (err) { console.log(err); } 
         else {
             console.log(`\n`);
             console.table(row);
             mainP();
-        }
-    })
+        }})
 }
     
 // * view all roles,will display roles table 
 function view_ROLE (){
-    const sql = `SELECT  role.role_title AS Job_Title, 
-        role.id AS Role_ID, 
-        department.dep_name AS Department, 
-        role.role_salary AS Salary
-    FROM role
-    JOIN department 
-    ON role.dep_id = department.id
-    ORDER BY role.role_title;`;
+    const sql = `SELECT  role.role_title AS Job_Title, role.id AS Role_ID, department.dep_name AS Department, role.role_salary AS Salary
+    FROM role JOIN department ON role.dep_id = department.id ORDER BY role.role_title;`;
     db.query(sql, (err, row) => {
         if (err) { console.log(err); } 
         else {
             console.log(`\n`);
             console.table(row);
             mainP();
-        }
-    })
+        }})
 }
 
 // * view all employees, will display employee table
 function view_EMPL (){
-    const sql = `SELECT  associate.id AS ID,
-        associate.first_name AS First_Name,
-        associate.last_name AS Last_Name,
-        role.role_title AS Job_Title,
-        department.dep_name AS Department,
-        role.role_salary AS Salary,
-        CONCAT(manager.first_name, " ", manager.last_name) AS Manager
+    const sql = `SELECT  associate.id AS ID, associate.first_name AS First_Name, associate.last_name AS Last_Name, role.role_title AS Job_Title, 
+        department.dep_name AS Department, role.role_salary AS Salary, CONCAT(manager.first_name, " ", manager.last_name) AS Manager
     FROM employee associate
     LEFT JOIN employee manager ON associate.manager_id = manager.id
     LEFT JOIN role ON associate.role_id = role.id
     LEFT JOIN department ON role.dep_id = department.id
     ORDER BY associate.id;`;
-
     db.query(sql, (err, row) => {
         if (err) { console.log(err); } 
         else {
             console.log(`\n`);
             console.table(row);
             mainP();
-        }
-    })
+        }})
 }
 
 // * add a department, will prompt questions
@@ -139,17 +117,11 @@ function add_DEPA (){
         ])
         .then((response) => {
             // create a new query with the information from prompt and save to database
-            const sql = `INSERT INTO department (dep_name)
-            VALUES (?)`;
-            
+            const sql = `INSERT INTO department (dep_name) VALUES (?)`;    
             db.query(sql, response.newDEPA, (err, result) => {
                 if (err) { console.log(err); } 
-                else {
-                    console.log(`Added ${response.newDEPA} department to the company_db Database`);
-                    mainP();
-                }
-            });
-        })
+                else { mainP(); }
+            }); })
 }
 // * add a role, will prompt questions 
 // Question: the name, salary, and department for the role
@@ -175,18 +147,13 @@ function add_ROLE (){
             }
         ])
         .then((response) => {
-            const sql = `INSERT INTO role (dep_id, role_title, role_salary)
-            VALUES (?,?,?);`;
+            const sql = `INSERT INTO role (dep_id, role_title, role_salary) VALUES (?,?,?);`;
             const params = [response.depa, response.newRole, response.newSalary];
             
             db.query(sql, params, (err, result) => {
                 if (err) { console.log(err); } 
-                else {
-                    console.log(`Added ${response.newRole} role to the company_db Database`);
-                    mainP();
-                }
-            });
-        })
+                else { mainP(); }
+            }); })
 }
 
 // * add an employee, will prompt questions
@@ -219,18 +186,12 @@ function add_EMPL (){
             }
         ])
         .then((response) =>{
-            const sql = `INSERT INTO employee (role_id, first_name, last_name, manager_id)
-            VALUES (?,?,?,?);`;
+            const sql = `INSERT INTO employee (role_id, first_name, last_name, manager_id) VALUES (?,?,?,?);`;
             const params = [response.role, response.firstNAME, response.lastNAME, response.Manager];
-            
             db.query(sql, params, (err, result) => {
                 if (err) { console.log(err); } 
-                else {
-                    console.log(`Added ${response.firstNAME} ${response.lastNAME} to the company_db Database`);
-                    mainP();
-                }
-            });
-        })
+                else { mainP(); }
+            }); })
 }
 // * update an employee role, will prompt questions
 // Queston: select an employee to update
@@ -258,12 +219,8 @@ function update_EMPL(){
             const params = [response.newROLE, response.employee]
             db.query(sql, params, (err, result) => {
                 if (err) { console.log(err); }
-                else {
-                    console.log(`Updated associate new role information`);
-                    mainP();
-                }
-            });
-        })
+                else { mainP(); }
+            }); })
 }
 
 // -- update employe manager
@@ -288,12 +245,8 @@ function update_MANA(){
             const params = [response.newMANA, response.employee]
             db.query(sql, params, (err, result) => {
                 if (err){ console.log(err); }
-                else {
-                    console.log(`Updated associate's Manager`);
-                    mainP();
-                }
-            });
-        })
+                else { mainP(); }
+            }); })
 }
 
 // -- view employees by manager
@@ -304,17 +257,14 @@ function viewBY_MANA(){
             {
                 type: "list",
                 name: "manager",
-                message: "Choose a manager to display the employees related to this manager",
+                message: "Choose a manager to display employees related to that manager",
                 choices: async function list() { return list_manager();}
             }
         ])
         .then((response) => {
             const sql = `SELECT  CONCAT(manager.first_name, " ", manager.last_name) AS Manager,
                 CONCAT(associate.first_name, " ", associate.last_name) AS Employee_Name,
-                role.role_title AS Job_Title,
-                department.dep_name AS Department,
-                role.role_salary AS Salary,
-                associate.id AS ID
+                role.role_title AS Job_Title, department.dep_name AS Department, role.role_salary AS Salary, associate.id AS ID
             FROM employee associate
             LEFT JOIN employee manager ON associate.manager_id = manager.id
             LEFT JOIN role ON associate.role_id = role.id
@@ -322,37 +272,35 @@ function viewBY_MANA(){
             WHERE associate.manager_id = ?;`;
             db.query(sql, response.manager, (err, result) => {
                 if (err){ console.log(err); }
-                else {
-                    console.log();
-                    mainP();
-                }
-            });
-        })
+                else { mainP(); }
+            }); })
 }
 
 // -- view employees by department
 // chose a department and display employees on department
 function viewBY_DEPA(){
-    const sql = `SELECT  department.dep_name AS Department,
-        CONCAT(manager.first_name, " ", manager.last_name) AS Manager,
-        CONCAT(associate.first_name, " ", associate.last_name) AS Employee_Name,
-        role.role_title AS Job_Title,
-        role.role_salary AS Salary,
-        associate.id AS ID
-    FROM employee associate
-    LEFT JOIN employee manager ON associate.manager_id = manager.id
-    LEFT JOIN role ON associate.role_id = role.id
-    LEFT JOIN department ON role.dep_id = department.id
-    ORDER BY Department;`;
-
-    db.query(sql, (err, row) => {
-        if (err) { console.log(err); } 
-        else {
-            console.log(`\n`);
-            console.table(row);
-            mainP();
-        }
-    })
+    inquirer
+        .prompt([
+            {
+                type: "list",
+                name: "depa",
+                message: "Choose a department to display employees on that department.",
+                choices: async function list() {return list_dep();}
+            }
+        ])
+        .then((response) => {
+            const sql = `SELECT  department.dep_name AS Department, CONCAT(manager.first_name, " ", manager.last_name) AS Manager,
+                CONCAT(associate.first_name, " ", associate.last_name) AS Employee_Name, role.role_title AS Job_Title,
+                role.role_salary AS Salary, associate.id AS ID
+        FROM employee associate
+        LEFT JOIN employee manager ON associate.manager_id = manager.id
+        LEFT JOIN role ON associate.role_id = role.id
+        LEFT JOIN department ON role.dep_id = department.id
+        WHERE department.id = ?;`;
+            db.query(sql, response.depa, (err, result) => {
+                if(err){ console.log(err); }
+                else { mainP(); }
+            }); })
 }
 
 // -- delete departments, roles, employees
