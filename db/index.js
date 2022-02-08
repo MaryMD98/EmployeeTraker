@@ -56,6 +56,19 @@ const list_employee = async () => {
     return result;
 }
 
+// Function will return a list of departments  to use for budgets check
+const budget_dep = async () => {
+    const sql = `SELECT * FROM department;`;
+    const sql_QR = await db.promise().query(sql);
+    
+    let result = sql_QR[0].map(({dep_name, id}) => ({
+        name: `${dep_name}`,
+        value: id
+    }));
+    result.push({name: 'Display ALL', value: null});
+    return result;
+}
+
 //used to init
 // npm init
 // npm i inquirer
@@ -64,4 +77,4 @@ const list_employee = async () => {
 // npm i dotenv
 // npm i express
 
-module.exports = {list_dep, list_role, list_manager, list_employee};
+module.exports = {list_dep, list_role, list_manager, list_employee, budget_dep};

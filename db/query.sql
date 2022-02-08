@@ -6,19 +6,19 @@
 -----------------------------------------------------
 
 -- view all departments function will display all departments
-SELECT department.dep_name AS department_Name, department.id AS department_ID
+SELECT department.id AS department_ID, department.dep_name AS department_Name 
 FROM department
-ORDER BY department.dep_name;
+ORDER BY department.id;
 
 -- view all roles function will display all job titles
-SELECT  role.role_title AS Job_Title, 
-        role.id AS Role_ID, 
+SELECT  role.id AS Role_ID,
+        role.role_title AS Job_Title,  
         department.dep_name AS Department, 
         role.role_salary AS Salary
 FROM role
 JOIN department 
 ON role.dep_id = department.id
-ORDER BY role.role_title;
+ORDER BY role.id;
 
 -- view all employees function will display all employee data
 SELECT  associate.id AS ID,
@@ -73,7 +73,6 @@ WHERE associate.manager_id = ?;
 
 -- view employees by department *********
 SELECT  department.dep_name AS Department,
-        CONCAT(manager.first_name, " ", manager.last_name) AS Manager,
         CONCAT(associate.first_name, " ", associate.last_name) AS Employee_Name,
         role.role_title AS Job_Title,
         role.role_salary AS Salary,
@@ -99,6 +98,14 @@ FROM employee
 LEFT JOIN role ON employee.role_id = role.id
 LEFT JOIN department ON role.dep_id = department.id
 WHERE department.id = ?;
+
+-- display all budgets
+SELECT  department.dep_name AS Department,
+            SUM(role.role_salary) Department_Budget 
+FROM employee 
+LEFT JOIN role ON employee.role_id = role.id
+LEFT JOIN department ON role.dep_id = department.id
+GROUP BY department.dep_name;
 
 
 -----------------------------------------------------

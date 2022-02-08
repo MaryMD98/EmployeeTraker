@@ -1,6 +1,6 @@
 const inquirer = require('inquirer');
 const db = require('./db/connection.js');
-const {list_dep, list_role, list_manager, list_employee} = require('./db/index.js');
+const {list_dep, list_role, list_manager, list_employee, budget_dep} = require('./db/index.js');
 
 ///**************************************************** */
 /// main prompt to ask user what they would like to do.
@@ -53,8 +53,8 @@ function view_DEPA (){
 } 
 // * view all roles,will display roles table 
 function view_ROLE (){
-    const sql = `SELECT  role.role_title AS Job_Title, role.id AS Role_ID, department.dep_name AS Department, role.role_salary AS Salary
-    FROM role JOIN department ON role.dep_id = department.id ORDER BY role.role_title;`;
+    const sql = `SELECT  role.id AS Role_ID, role.role_title AS Job_Title, department.dep_name AS Department, role.role_salary AS Salary
+    FROM role JOIN department ON role.dep_id = department.id ORDER BY role.id;`;
     db.query(sql, (err, row) => {
         if (err) { console.log(err); } 
         else { console.log(`\n`); console.table(row); mainP(); }
@@ -252,14 +252,11 @@ function viewBY_DEPA(){
             }
         ])
         .then((response) => {
-            const sql = `SELECT  department.dep_name AS Department, CONCAT(manager.first_name, " ", manager.last_name) AS Manager,
-                CONCAT(associate.first_name, " ", associate.last_name) AS Employee_Name, role.role_title AS Job_Title,
-                role.role_salary AS Salary, associate.id AS ID
-        FROM employee associate
-        LEFT JOIN employee manager ON associate.manager_id = manager.id
-        LEFT JOIN role ON associate.role_id = role.id
-        LEFT JOIN department ON role.dep_id = department.id
-        WHERE department.id = ?;`;
+            const sql = `SELECT  department.dep_name AS Department, CONCAT(associate.first_name, " ", associate.last_name) AS Employee_Name, 
+                role.role_title AS Job_Title, role.role_salary AS Salary, associate.id AS ID
+            FROM employee associate LEFT JOIN employee manager ON associate.manager_id = manager.id
+            LEFT JOIN role ON associate.role_id = role.id  LEFT JOIN department ON role.dep_id = department.id
+            WHERE department.id = ?;`;
             db.query(sql, response.depa, (err, row) => {
                 if(err){ console.log(err); }
                 else { console.log(`\n`); console.table(row); mainP(); }
@@ -344,16 +341,27 @@ function budget(){
                 type: "list",
                 name: "budget",
                 message: "what Department would you like to see the budged?",
-                choices: async function list() {return list_dep();}
+                choices: async function list() { return budget_dep();}
             }
         ])
         .then((response) => {
-            const sql = `SELECT  department.dep_name AS Department, SUM(role.role_salary) Department_Budget 
-                FROM employee   LEFT JOIN role ON employee.role_id = role.id
-                LEFT JOIN department ON role.dep_id = department.id
-                WHERE department.id = ?;`;
-            db.query(sql, response.budget, (err, row) => {
-                if(err){ console.log(err); }
-                else { console.log(`\n`); console.table(row); mainP(); }
-            }); })
+            // display all the budgets
+            if(response.budget === null){
+                sql = `SELECT  department.dep_name AS Department, SUM(role.role_salary) Department_Budget 
+                    FROM employee LEFT JOIN role ON employee.role_id = role.id
+                    LEFT JOIN department ON role.dep_id = department.id  GROUP BY department.dep_name;`;
+                db.query(sql, (err, row) => {
+                    if (err) { console.log(err); } 
+                    else { console.log(`\n`); console.table(row); mainP(); }
+                });} 
+            // display by department id
+            else {
+                sql = `SELECT  department.dep_name AS Department, SUM(role.role_salary) Department_Budget 
+                    FROM employee LEFT JOIN role ON employee.role_id = role.id
+                    LEFT JOIN department ON role.dep_id = department.id WHERE department.id = ?;`;
+                db.query(sql, response.budget, (err, row) => {
+                    if(err){ console.log(err); }
+                    else { console.log(`\n`); console.table(row); mainP(); }
+                }); }
+         })
 }
