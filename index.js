@@ -16,7 +16,7 @@ function mainP(){
                 name: 'choice',
                 message: "What would you like to do?",
                 choices:["View all departments", "View all roles", "View all employees", "Add a department", "Add a role", "Add an employee",
-                        "Update an employee role", "Update employe manager", "View employees by manager", "View employees by department"]
+                        "Update an employee role", "Update employe manager", "View employees by manager", "View employees by department", "Delete departments, roles, and employees" ]
             }
         ])
         .then((response) =>{
@@ -48,8 +48,11 @@ function mainP(){
                 case "View employees by manager":
                     viewBY_MANA();
                     break;
-                default: // "View employees by department"  
+                case "View employees by department":
                     viewBY_DEPA();
+                    break;
+                default: // "Delete departments, roles, and employees"  
+                    delete_COMP();
                     break;
             }
         })
@@ -314,7 +317,64 @@ function delete_COMP(){
                 choices: ["Department", "Role", "Employee"]
             }
         ])
-        .then()
-
+        .then((response) => {
+            if (response.delete === "Department") {delete_DEPA();}
+            if (response.delete === "Role") {delete_ROLE();}
+            if (response.delete === "Employee") {delete_EMP();}
+        })
+}
+// -- to delete a department 
+function delete_DEPA(){
+    inquirer
+        .prompt([
+            {
+                type: "list",
+                name: "del_depa",
+                message: "what Department would you like to delete?",
+                choices: async function list() {return list_dep();}
+            }
+        ])
+        .then((response) => {
+            const sql = `DELETE FROM department WHERE department.id = ?;`;
+            console.log("department id " + response.del_depa);
+            db.query(sql, response.del_depa, (err, result) => {
+                if(err){ console.log(err); } else { mainP(); }
+            }); })
+}
+// -- to delete a role // 
+function delete_ROLE(){
+    inquirer
+        .prompt([
+            {
+                type: "list",
+                name: "del_role",
+                message: "what Role would you like to delete?",
+                choices: async function list() { return list_role();}
+            }
+        ])
+        .then((response) => {
+            const sql = `DELETE FROM role WHERE role.id = ?;`;
+            console.log("role id " + response.del_role);
+            db.query(sql, response.del_role, (err, result) => {
+                if(err){ console.log(err); } else { mainP(); }
+            }); })
+}
+// -- to delete a employee;
+function delete_EMP(){
+    inquirer
+        .prompt([
+            {
+                type: "list",
+                name: "del_emp",
+                message: "what Employee would you like to delete?",
+                choices: async function list() { return list_employee();}
+            }
+        ])
+        .then((response) => {
+            const sql = `DELETE FROM employee WHERE employee.id = ?;`;
+            console.log("employee id " + response.del_emp);
+            db.query(sql, response.del_emp, (err, result) => {
+                if(err){ console.log(err); } else { mainP(); }
+            }); })
 }
 // -- view the total utilized budget of a department 

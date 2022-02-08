@@ -86,11 +86,11 @@ WHERE department.id = ?;
 
 -- delete departments, roles, employees
 -- to delete a role
-DELETE FROM role WHERE role.id = 15;
+DELETE FROM role WHERE role.id = ?;
 -- to delete a department
-DELETE FROM department WHERE department.id = 15;
+DELETE FROM department WHERE department.id = ?;
 -- to delete a employee
-DELETE FROM employee WHERE employee.id = 15;
+DELETE FROM employee WHERE employee.id = ?;
 
 -- view the total utilized budget of a department 
 
