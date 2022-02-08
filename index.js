@@ -288,7 +288,6 @@ function delete_DEPA(){
         ])
         .then((response) => {
             const sql = `DELETE FROM department WHERE department.id = ?;`;
-            console.log("department id " + response.del_depa);
             db.query(sql, response.del_depa, (err, result) => {
                 if(err){ console.log(err); } else { mainP(); }
             }); })
@@ -306,7 +305,6 @@ function delete_ROLE(){
         ])
         .then((response) => {
             const sql = `DELETE FROM role WHERE role.id = ?;`;
-            console.log("role id " + response.del_role);
             db.query(sql, response.del_role, (err, result) => {
                 if(err){ console.log(err); } else { mainP(); }
             }); })
@@ -324,7 +322,6 @@ function delete_EMP(){
         ])
         .then((response) => {
             const sql = `DELETE FROM employee WHERE employee.id = ?;`;
-            console.log("employee id " + response.del_emp);
             db.query(sql, response.del_emp, (err, result) => {
                 if(err){ console.log(err); } else { mainP(); }
             }); })
